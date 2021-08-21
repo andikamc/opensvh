@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+date=$(date +%Y-%m-%d)
+
+# Auto Command
+sh -c /usr/local/bin/expire-ssh
+sh -c /usr/local/bin/expire-trojan
+sh -c /usr/local/bin/expire-vmess
+sh -c /usr/local/bin/expire-vless
+
+# Save log
+echo > /var/log/auto-expire-script-${date}
+echo "# Auto Restart Job Done #" >> /var/log/auto-expire-script-${date}

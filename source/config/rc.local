@@ -1,0 +1,32 @@
+#!/bin/sh -e
+# rc.local
+# By default this script does nothing.
+
+# Timezone setting
+timedatectl set-timezone "Asia/Jakarta"
+
+# Disable IPv6
+echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
+
+# Socat BadVPN UDPGW
+screen -dmS badvpn badvpn-udpgw --logger syslog --listen-addr 0.0.0.0:7000 --max-clients 500
+screen -dmS socat7100 socat TCP-LISTEN:7100,fork,reuseaddr TCP:127.0.0.1:7000
+screen -dmS socat7200 socat TCP-LISTEN:7200,fork,reuseaddr TCP:127.0.0.1:7000
+screen -dmS socat7300 socat TCP-LISTEN:7300,fork,reuseaddr TCP:127.0.0.1:7000
+screen -dmS socat7100 socat UDP-LISTEN:7100,fork,reuseaddr UDP:127.0.0.1:7000
+screen -dmS socat7200 socat UDP-LISTEN:7200,fork,reuseaddr UDP:127.0.0.1:7000
+screen -dmS socat7300 socat UDP-LISTEN:7300,fork,reuseaddr UDP:127.0.0.1:7000
+
+# Check start application
+systemctl start ssh > /dev/null 2>&1
+systemctl start dropbear > /dev/null 2>&1
+systemctl start stunnel5 > /dev/null 2>&1
+systemctl start trojan > /dev/null 2>&1
+
+#
+echo "unset HISTFILE" >> /etc/profile
+echo "clear" >> .profile
+
+# Exit go to boot
+exit 0

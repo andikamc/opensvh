@@ -1,0 +1,4 @@
+#!/bin/sh
+#
+wget https://github.com/andikamc/badvpn-udpgw/archive/refs/tags/1.999.128.zip && unzip 1.999.128.zip
+cd badvpn-udpgw-1.999.128 && mv badvpn-udpgw /usr/bin/badvpn-udpgw

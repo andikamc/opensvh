@@ -1,0 +1,29 @@
+#!/bin/bash
+IP=$(wget -qO- icanhazip.com);
+clear
+read -p "Username : " Login
+read -p "Password : " Pass
+read -p "Expired (hari): " masaaktif
+sleep 1
+clear
+useradd -e `date -d "$masaaktif days" +"%Y-%m-%d"` -s /usr/sbin/nologin -M -N $Login
+exp="$(chage -l $Login | grep "Account expires" | awk -F": " '{print $2}')"
+echo -e "$Pass\n$Pass\n"|passwd $Login &> /dev/null
+echo -e ""
+echo -e "====================================="
+echo -e ""
+echo -e "    OpenSVH Project Rev.1         "
+echo -e ""
+echo -e "====================================="
+echo -e "Username       : $Login "
+echo -e "Password       : $Pass"
+echo -e "====================================="
+echo -e "Domain            : ${OPENSVH_DOMAIN}"
+echo -e "Host              : ${IP}"
+echo -e "OpenSSH           : 22"
+echo -e "Dropbear          : 143"
+echo -e "SSL/TLS OpenSSH   : 2052"
+echo -e "SSL/TLS Dropbear  : 2053"
+echo -e "badvpn udpgw      : 7000 / 7100 / 7200 / 7300"
+echo -e "==============================="
+echo -e "Expired On     : $exp"

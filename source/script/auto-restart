@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+date=$(date +%Y-%m-%d)
+
+# Restart Application
+systemctl restart ssh
+systemctl restart dropbear
+systemctl restart stunnel5
+systemctl restart trojan
+
+# Save log
+echo > /var/log/daily-script-${date}
+echo "# Auto Restart Job Done #" >> /var/log/daily-script-${date}

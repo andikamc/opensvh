@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+apt -y install zip unzip libssl-dev
+wget https://github.com/mtrojnar/stunnel/archive/refs/tags/stunnel-5.60.zip && unzip stunnel-5.60.zip
+cd stunnel-stunnel-5.60 && ./configure && make && make install
+useradd -s /bin/false -r stunnel && mkdir /var/lib/stunnel && chown stunnel:stunnel /var/lib/stunnel
+cp /usr/local/share/doc/stunnel/examples/stunnel.init /etc/init.d/stunnel5 && chmod 755 /etc/init.d/stunnel5
+cp /usr/local/share/doc/stunnel/examples/stunnel.service /etc/systemd/system/stunnel5.service
+systemctl enable stunnel5
+cd .. && rm -rf stunnel-stunnel-5.60
+
+# Generate Config
+rm -rf /usr/local/etc/stunnel/stunnel.conf
+echo "; OpenSVH Default Configuration" > /usr/local/etc/stunnel/stunnel.conf
+echo "setuid = stunnel" >> /usr/local/etc/stunnel/stunnel.conf
+echo "setgid = stunnel" >> /usr/local/etc/stunnel/stunnel.conf
+echo "chroot = /var/lib/stunnel" >> /usr/local/etc/stunnel/stunnel.conf
+echo "client = no" >> /usr/local/etc/stunnel/stunnel.conf
+echo "socket = a:SO_REUSEADDR=1" >> /usr/local/etc/stunnel/stunnel.conf
+echo "socket = l:TCP_NODELAY=1" >> /usr/local/etc/stunnel/stunnel.conf
+echo "socket = r:TCP_NODELAY=1" >> /usr/local/etc/stunnel/stunnel.conf
+echo "cert = /opt/certificate/certificate.crt" >> /usr/local/etc/stunnel/stunnel.conf
+echo "key = /opt/certificate/certificate.key" >> /usr/local/etc/stunnel/stunnel.conf
+echo "CAfile = /opt/certificate/CA.crt" >> /usr/local/etc/stunnel/stunnel.conf
+echo "[dropbear]" >> /usr/local/etc/stunnel/stunnel.conf
+echo "accept = 2053" >> /usr/local/etc/stunnel/stunnel.conf
+echo "connect = 127.0.0.1:143" >> /usr/local/etc/stunnel/stunnel.conf
+echo "[openssh]" >> /usr/local/etc/stunnel/stunnel.conf
+echo "accept = 2052" >> /usr/local/etc/stunnel/stunnel.conf
+echo "connect = 127.0.0.1:22" >> /usr/local/etc/stunnel/stunnel.conf
+
+#
+systemctl enable stunnel5

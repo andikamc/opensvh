@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+apt -y install dropbear
+sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=143/g' /etc/default/dropbear
+sed -i 's/#DROPBEAR_RSAKEY/DROPBEAR_RSAKEY/g' /etc/default/dropbear
+sed -i 's/#DROPBEAR_DSSKEY/DROPBEAR_DSSKEY/g' /etc/default/dropbear
+systemctl enable dropbear

@@ -1,0 +1,13 @@
+[Unit]
+Description=Trojan
+Documentation=https://trojan-gfw.github.io/trojan/
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/trojan -c /etc/trojan/config.json -l /var/log/trojan.log
+KillMode=process
+Restart=no
+RestartSec=15s
+
+[Install]
+WantedBy=multi-user.target
