@@ -1,6 +1,6 @@
 name: Docker Image CI
 
-on: [release]
+on: [published]
 
 jobs:
   push_to_registry:
