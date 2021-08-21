@@ -69,6 +69,9 @@ RUN echo "0 0 * * * root /usr/local/bin/auto-expire" >> /etc/cron.d/auto-expire
 RUN echo "# Auto Kill Job" > /etc/cron.d/auto-kill
 RUN echo "*/1 * * * * root /usr/local/bin/kick-ssh 2" >> /etc/cron.d/auto-kill
 
+# Fix bug tty
+RUN cp /bin/true /sbin/agetty
+
 # Container Environment
 EXPOSE 22/tcp 80/tcp 443/tcp
 LABEL maintainer="Andika Muhammad Cahya <andkmc99@gmail.com>"
