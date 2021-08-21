@@ -34,22 +34,25 @@ ADD /source/service/trojan.service /etc/systemd/system/trojan.service
 RUN chmod 644 /etc/systemd/system/trojan.service
 RUN touch /etc/trojan/akun.conf && touch /tmp/iptrojan.txt
 RUN find /etc/trojan/ -type f -print0 | xargs -0 dos2unix
+RUN find /etc/trojan/ -type f -print0 | xargs -0 chmod +x
 
 # Container Source [RC-LOCAL]
 ADD /source/service/rc-local.service /etc/systemd/system/rc-local.service
 ADD /source/config/rc.local /etc/rc.local
 RUN chmod 644 /etc/systemd/system/rc-local.service
 RUN dos2unix /etc/rc.local
+RUN chmod 750 /etc/rc.local
 RUN systemctl enable rc-local
 
 # Import Script
 ADD /source/script /usr/local/bin
 RUN find /usr/local/bin -type f -print0 | xargs -0 dos2unix
+RUN find /usr/local/bin -type f -print0 | xargs -0 chmod 750
 
 # Import Certificate
 ADD /source/certificate /opt/certificate
 RUN find /opt/certificate -type f -print0 | xargs -0 dos2unix
-RUN find /opt/certificate -type f -print0 | xargs -0 chmod 644
+RUN find /opt/certificate -type f -print0 | xargs -0 chmod 750
 
 # banner /etc/issue.net
 RUN echo "Premium Server By OpenSVH - Contact @ wa.me/6281317971329" > /etc/issue.net
