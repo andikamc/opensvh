@@ -2,6 +2,11 @@
 # rc.local
 # By default this script does nothing.
 
+# Disable tty
+systemctl stop getty@tty1.service > /dev/null 2>&1
+systemctl mask getty@tty1.service > /dev/null 2>&1
+systemctl daemon-reload > /dev/null 2>&1
+
 # Timezone setting
 timedatectl set-timezone "Asia/Jakarta"
 
